@@ -24,6 +24,7 @@ public class Cxense {
     private String userAgent = "cx-java-sdk/1.0";
     private int connectTimeoutMillis = 1000 * 20; // 20 seconds
     private int readTimeoutMillis = 1000 * 60 * 5; // 5 minutes
+    protected static String pageViewEventBaseUrl = "http://comcluster.cxense.com/Repo/rep.gif";
 
     // Hide the default constructor
     private Cxense() { }

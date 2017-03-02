@@ -29,7 +29,7 @@ public class PageViewEvent {
     }
 
     public int send() throws Exception {
-        String baseUrl = "http://comcluster.cxense.com/Repo/rep.gif";
+        String baseUrl = Cxense.pageViewEventBaseUrl;
         String url = baseUrl +
                 "?typ=pgv" +
                 "&sid=" + URLEncoder.encode(this.siteId, "UTF-8") +

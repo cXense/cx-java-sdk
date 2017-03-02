@@ -17,6 +17,24 @@
             <artifactId>javax.json</artifactId>
             <version>1.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.9.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.3.16.v20170120</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>9.3.16.v20170120</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

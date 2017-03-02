@@ -16,14 +16,9 @@
             <source>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.${project.packaging}</source>
             <outputDirectory>/lib/</outputDirectory>
         </file>
-    </files>
-    <fileSets>
-        <fileSet>
-            <directory>${project.build.directory}/lib/</directory>
+        <file>
+            <source>${project.build.directory}/lib/javax.json-1.0.4.jar</source>
             <outputDirectory>/third-party/lib/</outputDirectory>
-            <includes>
-                <include>*.jar</include>
-            </includes>
-        </fileSet>
-    </fileSets>
+        </file>
+    </files>
 </assembly>
