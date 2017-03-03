@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -13,6 +14,8 @@ public class PageViewEvent {
     private String userId;
     private String location;
     private String referrer;
+    private HashMap<String, String> customParameters = new HashMap<String, String>();
+    private HashMap<String, String> externalIds = new HashMap<String, String>();
 
     public PageViewEvent(String siteId, String location, String userId) {
         this.siteId = siteId;
@@ -24,7 +27,23 @@ public class PageViewEvent {
         return this;
     }
 
-    public PageViewEvent setCustomParameter(String key, String value) {
+    public PageViewEvent addCustomParameter(String key, String value) {
+        customParameters.put(key, value);
+        return this;
+    }
+
+    public PageViewEvent addCustomParameters(Map<String, String> newCustomParameters) {
+        customParameters.putAll(newCustomParameters);
+        return this;
+    }
+
+    public PageViewEvent addExternalUserId(String type, String id) {
+        externalIds.put(type, id);
+        return this;
+    }
+
+    public PageViewEvent addExternalUserIds(Map<String, String> newExternalIds) {
+        externalIds.putAll(newExternalIds);
         return this;
     }
 
@@ -36,8 +55,17 @@ public class PageViewEvent {
                 "&loc=" + URLEncoder.encode(this.location, "UTF-8") +
                 "&ckp=" + URLEncoder.encode(this.userId, "UTF-8") +
                 "&rnd=" + ("" + Math.random() + new Date().getTime()).replace(".", "") +
-                (this.referrer != null ? "%ref=" + URLEncoder.encode(this.referrer, "UTF-8") : "");
-        System.out.println(url);
+                (this.referrer != null ? "&ref=" + URLEncoder.encode(this.referrer, "UTF-8") : "");
+
+        for (Map.Entry<String, String> entry : customParameters.entrySet()) {
+            url += "&cp_" + URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8");
+        }
+        int i = 0;
+        for (Map.Entry<String, String> entry : externalIds.entrySet()) {
+            url += "&eit" + i + "=" + URLEncoder.encode(entry.getKey(), "UTF-8");
+            url += "&eid" + i + "=" + URLEncoder.encode(entry.getValue(), "UTF-8");
+            i++;
+        }
         HttpURLConnection connection = (HttpURLConnection) (new URL(url).openConnection());
         connection.connect();
         return connection.getResponseCode();
