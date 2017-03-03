@@ -109,6 +109,8 @@ public class SDKSample3 {
 
 ### Generic API requests
 
+##### Request and response as JSON strings
+
 A generic API request sending the request as a JSON string and getting the response back as a JSON string 
 
 ```java
@@ -125,6 +127,8 @@ public class SDKSample4 {
     }
 }
 ```
+
+##### Request and response as JSON objects
 
 A generic API request sending the request as a JSON object and getting the response back as a JSON object 
 
@@ -146,6 +150,7 @@ public class SDKSample5 {
 }
 ```
 
+##### Using a custom HTTP client
 
 If you want to use a custom HTTP client, there is a helper method that will build the required authentication headers for you.
 Here is an example using Java's URLConnection:
