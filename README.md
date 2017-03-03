@@ -21,6 +21,7 @@ about how to create a Cxense account and retrieve your Cxense credentials.
   <dependency>
     <groupId>com.cxense.sdk</groupId>
     <artifactId>cx-java-sdk</artifactId>
+    <version>1.0.1</version>
   </dependency>
 </dependencies>
 ```
