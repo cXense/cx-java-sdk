@@ -5,8 +5,6 @@
 The *Cxense Java SDK* enables Java developers to easily work with the Cxense APIs. You can get
 started in minutes using ***Maven*** or by downloading a [single zip file][install-jar].
 
-* [API Docs][docs-api]
-
 ## Getting Started
 
 #### Sign up for Cxense ####
@@ -121,6 +119,10 @@ public class SDKSample4 {
     }
 }
 ```
+
+## Resources
+
+* [API Docs][docs-api]
 
 
 
