@@ -144,7 +144,6 @@ public class SDKSample5 {
         String apiPath = "/site";
         JsonObject requestObject = Json.createObjectBuilder().build();
         JsonObject responseObject = cx.apiRequest(apiPath, requestObject);
-        System.out.println(responseObject.toString());
         
     }
 }
@@ -177,7 +176,6 @@ public class SDKSample6 {
         connection.setRequestProperty("X-cXense-Authentication", Cxense.getHttpAuthenticationHeader(username, apiKey));
         connection.connect();
         String jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
-        System.out.println(jsonResponse );
         
     }
 }
