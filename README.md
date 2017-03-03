@@ -191,6 +191,6 @@ public class SDKSample6 {
 
 [homepage]: https://www.cxense.com/
 [docs-api]: https://wiki.cxense.com/display/cust/Home
-[install-jar]: http://sdk.cxense.com/cx-java-sdk-1.0.0.zip
+[install-jar]: http://sdk.cxense.com/cx-java-sdk-1.0.1.zip
 [cx-java-sdk-bom]: https://github.com/cxense/cx-java-sdk/tree/master/cx-java-sdk-bom
 
