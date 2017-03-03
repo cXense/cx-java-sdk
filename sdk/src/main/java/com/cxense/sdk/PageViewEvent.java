@@ -13,6 +13,8 @@ public class PageViewEvent {
     private String siteId;
     private String userId;
     private String location;
+    private Double latitude;
+    private Double longitude;
     private String referrer;
     private HashMap<String, String> customParameters = new HashMap<String, String>();
     private HashMap<String, String> externalIds = new HashMap<String, String>();
@@ -24,6 +26,12 @@ public class PageViewEvent {
     }
     public PageViewEvent setReferrer(String referrer) {
         this.referrer = referrer;
+        return this;
+    }
+
+    public PageViewEvent setGeoPosition(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         return this;
     }
 
@@ -55,7 +63,9 @@ public class PageViewEvent {
                 "&loc=" + URLEncoder.encode(this.location, "UTF-8") +
                 "&ckp=" + URLEncoder.encode(this.userId, "UTF-8") +
                 "&rnd=" + ("" + Math.random() + new Date().getTime()).replace(".", "") +
-                (this.referrer != null ? "&ref=" + URLEncoder.encode(this.referrer, "UTF-8") : "");
+                (this.latitude != null ? "&plat=" + URLEncoder.encode(this.latitude.toString(),"UTF-8") : "") +
+                (this.longitude != null ? "&plon=" + URLEncoder.encode(this.longitude.toString(),"UTF-8") : "") +
+                (this.referrer != null ? "&ref=" + URLEncoder.encode(this.referrer,"UTF-8") : "");
 
         for (Map.Entry<String, String> entry : customParameters.entrySet()) {
             url += "&cp_" + URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8");

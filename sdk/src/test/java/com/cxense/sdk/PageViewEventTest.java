@@ -71,6 +71,14 @@ public class PageViewEventTest {
     }
 
     @Test
+    public void testGeoPosition() throws Exception {
+        String referrer = "http://www.siteb.com/";
+        int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").setGeoPosition(7.6145, 110.7122).send();
+        queryString = queryString.replaceAll("rnd=[0-9]+", "rnd=1");
+        Assert.assertEquals(queryString, "typ=pgv&sid=1234&loc=http%3A%2F%2Fwww.site.com%2F&ckp=abcd&rnd=1&plat=7.6145&plon=110.7122");
+    }
+
+    @Test
     public void testCustomParameter() throws Exception {
         int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").addCustomParameter("section", "sports").send();
         queryString = queryString.replaceAll("rnd=[0-9]+", "rnd=1");
