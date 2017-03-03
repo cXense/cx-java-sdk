@@ -38,7 +38,9 @@ mvn clean package
 
 ## Sample usage
 
-### Send a basic page view event
+### Send a page view event
+
+#### Send a basic page view event
 
 ```java
 import com.cxense.sdk.Cxense;
@@ -53,7 +55,7 @@ public class SDKSample1 {
 }
 ```
 
-#### Send an advanced page view event
+##### Send an advanced page view event
 
 ```java
 import com.cxense.sdk.Cxense;
@@ -75,7 +77,7 @@ public class SDKSample2 {
 }
 ```
 
-#### Send a page view event with maps of values
+##### Send a page view event with maps of values
 
 For custom parameters and external IDs, you can provide a map of values instead of individual values:
 
@@ -107,6 +109,8 @@ public class SDKSample3 {
 
 ### Generic API requests
 
+A generic API request sending the request as a JSON string and getting the response back as a JSON string 
+
 ```java
 import com.cxense.sdk.Cxense;
 
@@ -114,11 +118,66 @@ public class SDKSample4 {
     public static void main(String[] args) throws Exception {
         
         Cxense cx = new Cxense("<username (email)>", "<api key>");
-        System.out.println( cx.apiRequest("/site", "{ }") );
+        String apiPath = "/site";
+        String request = "{}";
+        String response = cx.apiRequest(apiPath, request);
         
     }
 }
 ```
+
+A generic API request sending the request as a JSON object and getting the response back as a JSON object 
+
+```java
+import com.cxense.sdk.Cxense;
+import javax.json.Json;
+import javax.json.JsonObject;
+
+public class SDKSample5 {
+    public static void main(String[] args) throws Exception {
+        
+        Cxense cx = new Cxense("<username (email)>", "<api key>");
+        String apiPath = "/site";
+        JsonObject requestObject = Json.createObjectBuilder().build();
+        JsonObject responseObject = cx.apiRequest(apiPath, requestObject);
+        System.out.println(responseObject.toString());
+        
+    }
+}
+```
+
+
+If you want to use a custom HTTP client, there is a helper method that will build the required authentication headers for you.
+Here is an example using Java's URLConnection:
+
+```java
+import com.cxense.sdk.Cxense;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+
+public class SDKSample6 {
+    public static void main(String[] args) throws Exception {
+        
+        String username = "<username (email)>";
+        String apiKey = "<api key>";
+        String apiBaseUrl = "https://api.cxense.com";
+        String apiPath = "/site";
+        String jsonStringQuery = "{}";
+
+        String encodedJsonQuery = URLEncoder.encode(jsonStringQuery, "UTF-8");
+        URLConnection connection = new URL(apiBaseUrl + apiPath + "?json=" + encodedJsonQuery).openConnection();
+        connection.setRequestProperty("X-cXense-Authentication", Cxense.getHttpAuthenticationHeader(username, apiKey));
+        connection.connect();
+        String jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
+        System.out.println(jsonResponse );
+        
+    }
+}
+```
+
 
 ## Resources
 
