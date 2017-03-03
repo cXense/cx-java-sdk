@@ -71,6 +71,30 @@ public class PageViewEventTest {
     }
 
     @Test
+    public void testScreenSize() throws Exception {
+        String referrer = "http://www.siteb.com/";
+        int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").setScreenSize(1024, 768).send();
+        queryString = queryString.replaceAll("rnd=[0-9]+", "rnd=1");
+        Assert.assertEquals(queryString, "typ=pgv&sid=1234&loc=http%3A%2F%2Fwww.site.com%2F&ckp=abcd&rnd=1&res=1024x768");
+    }
+
+    @Test
+    public void testWindowSize() throws Exception {
+        String referrer = "http://www.siteb.com/";
+        int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").setWindowSize(927, 349).send();
+        queryString = queryString.replaceAll("rnd=[0-9]+", "rnd=1");
+        Assert.assertEquals(queryString, "typ=pgv&sid=1234&loc=http%3A%2F%2Fwww.site.com%2F&ckp=abcd&rnd=1&wsz=927x349");
+    }
+
+    @Test
+    public void testDevicePixelRatio() throws Exception {
+        String referrer = "http://www.siteb.com/";
+        int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").setDevicePixelRatio(1.4).send();
+        queryString = queryString.replaceAll("rnd=[0-9]+", "rnd=1");
+        Assert.assertEquals(queryString, "typ=pgv&sid=1234&loc=http%3A%2F%2Fwww.site.com%2F&ckp=abcd&rnd=1&dpr=1.4");
+    }
+
+    @Test
     public void testGeoPosition() throws Exception {
         String referrer = "http://www.siteb.com/";
         int responseCode = Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").setGeoPosition(7.6145, 110.7122).send();

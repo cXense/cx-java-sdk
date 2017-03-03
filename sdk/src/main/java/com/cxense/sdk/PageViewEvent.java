@@ -16,6 +16,9 @@ public class PageViewEvent {
     private Double latitude;
     private Double longitude;
     private String referrer;
+    private String screenSize;
+    private String windowSize;
+    private Double devicePixelRatio;
     private HashMap<String, String> customParameters = new HashMap<String, String>();
     private HashMap<String, String> externalIds = new HashMap<String, String>();
 
@@ -26,6 +29,21 @@ public class PageViewEvent {
     }
     public PageViewEvent setReferrer(String referrer) {
         this.referrer = referrer;
+        return this;
+    }
+
+    public PageViewEvent setScreenSize(int width, int height) {
+        this.screenSize = "" + width + "x" + height;
+        return this;
+    }
+
+    public PageViewEvent setWindowSize(int width, int height) {
+        this.windowSize = "" + width + "x" + height;
+        return this;
+    }
+
+    public PageViewEvent setDevicePixelRatio(double devicePixelRatio) {
+        this.devicePixelRatio = devicePixelRatio;
         return this;
     }
 
@@ -62,7 +80,10 @@ public class PageViewEvent {
                 "&sid=" + URLEncoder.encode(this.siteId, "UTF-8") +
                 "&loc=" + URLEncoder.encode(this.location, "UTF-8") +
                 "&ckp=" + URLEncoder.encode(this.userId, "UTF-8") +
-                "&rnd=" + ("" + Math.random() + new Date().getTime()).replace(".", "") +
+                "&rnd=" + (Math.round(Math.random() * 2147483647)) +
+                (this.screenSize != null ? "&res=" + URLEncoder.encode(this.screenSize,"UTF-8") : "") +
+                (this.windowSize != null ? "&wsz=" + URLEncoder.encode(this.windowSize,"UTF-8") : "") +
+                (this.devicePixelRatio != null ? "&dpr=" + URLEncoder.encode(this.devicePixelRatio.toString(),"UTF-8") : "") +
                 (this.latitude != null ? "&plat=" + URLEncoder.encode(this.latitude.toString(),"UTF-8") : "") +
                 (this.longitude != null ? "&plon=" + URLEncoder.encode(this.longitude.toString(),"UTF-8") : "") +
                 (this.referrer != null ? "&ref=" + URLEncoder.encode(this.referrer,"UTF-8") : "");
