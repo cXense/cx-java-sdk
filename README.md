@@ -149,6 +149,27 @@ public class SDKSample5 {
 }
 ```
 
+##### API request using a persisted query
+
+A persisted query can be setup that require no authentication. Only the persisted query ID need to be supplied. 
+
+```java
+import com.cxense.sdk.Cxense;
+
+public class SDKSample6 {
+    public static void main(String[] args) throws Exception {
+        
+        Cxense cx = new Cxense();
+        String apiPath = "/site";
+        String request = "{}";
+        String persistedQueryId = "<persisted query id>";
+        String response = cx.apiRequest(apiPath, request, persistedQueryId);
+        
+    }
+}
+```
+
+
 ##### Using a custom HTTP client
 
 If you want to use a custom HTTP client, there is a helper method that will build the required authentication headers for you.
@@ -162,7 +183,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class SDKSample6 {
+public class SDKSample7 {
     public static void main(String[] args) throws Exception {
         
         String username = "<username (email)>";

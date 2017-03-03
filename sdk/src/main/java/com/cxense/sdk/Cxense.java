@@ -26,8 +26,8 @@ public class Cxense {
     private int readTimeoutMillis = 1000 * 60 * 5; // 5 minutes
     protected static String pageViewEventBaseUrl = "http://comcluster.cxense.com/Repo/rep.gif";
 
-    // Hide the default constructor
-    private Cxense() { }
+    // Default constructor
+    public Cxense() { }
 
     // Constructor
     public Cxense(String username, String apiKey) {
