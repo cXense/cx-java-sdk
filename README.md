@@ -48,10 +48,10 @@ import com.cxense.sdk.Cxense;
 
 public class SDKSample1 {
     public static void main(String[] args) throws Exception {
-        
+
         //Cxense.pageViewEvent(<site ID>, <page url>, <end user ID>).send();
         Cxense.pageViewEvent("1234", "http://www.site.com/", "abcd").send();
-        
+
     }
 }
 ```
@@ -119,12 +119,12 @@ import com.cxense.sdk.Cxense;
 
 public class SDKSample4 {
     public static void main(String[] args) throws Exception {
-        
+
         Cxense cx = new Cxense("<username (email)>", "<api key>");
         String apiPath = "/site";
         String request = "{}";
         String response = cx.apiRequest(apiPath, request);
-        
+
     }
 }
 ```
@@ -140,12 +140,12 @@ import javax.json.JsonObject;
 
 public class SDKSample5 {
     public static void main(String[] args) throws Exception {
-        
+
         Cxense cx = new Cxense("<username (email)>", "<api key>");
         String apiPath = "/site";
         JsonObject requestObject = Json.createObjectBuilder().build();
         JsonObject responseObject = cx.apiRequest(apiPath, requestObject);
-        
+
     }
 }
 ```
@@ -159,13 +159,13 @@ import com.cxense.sdk.Cxense;
 
 public class SDKSample6 {
     public static void main(String[] args) throws Exception {
-        
+
         Cxense cx = new Cxense();
         String apiPath = "/site";
         String request = "{}";
         String persistedQueryId = "<persisted query id>";
         String response = cx.apiRequest(apiPath, request, persistedQueryId);
-        
+
     }
 }
 ```
@@ -186,7 +186,7 @@ import java.net.URLEncoder;
 
 public class SDKSample7 {
     public static void main(String[] args) throws Exception {
-        
+
         String username = "<username (email)>";
         String apiKey = "<api key>";
         String apiBaseUrl = "https://api.cxense.com";
@@ -198,7 +198,7 @@ public class SDKSample7 {
         connection.setRequestProperty("X-cXense-Authentication", Cxense.getHttpAuthenticationHeader(username, apiKey));
         connection.connect();
         String jsonResponse = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
-        
+
     }
 }
 ```
@@ -215,4 +215,3 @@ public class SDKSample7 {
 [docs-api]: https://wiki.cxense.com/display/cust/Home
 [install-jar]: http://sdk.cxense.com/cx-java-sdk-1.0.1.zip
 [cx-java-sdk-bom]: https://github.com/cxense/cx-java-sdk/tree/master/cx-java-sdk-bom
-
