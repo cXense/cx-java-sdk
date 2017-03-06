@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 
 
 public class CxenseTest {
+    private static String authenticationString;
     private static String queryString;
     private static JsonObject jsonBody;
     private static Server server;
@@ -54,15 +55,46 @@ public class CxenseTest {
     }
 
     @Test
-    public void testBasics() throws Exception {
+    public void testBasicsJsonString() throws Exception {
         Cxense cx = new Cxense("some.user@company.com", "api&user&h3Ke7wFEJcK33/dkeidj29==");
-        String jsonResponseString = cx.apiRequest("/public/date", "{ }");
+        String jsonResponseString = cx.apiRequest("/public/date", "{ \"a\": 1 }");
+        Assert.assertTrue(("" + CxenseTest.authenticationString).matches(
+                "^username=some\\.user@company\\.com date=20[0-9]+-[0-9]+-[0-9]+T[0-9]+:[0-9]+:[0-9.]+Z hmac-sha256-hex=[A-Z0-9]+$"));
+        Assert.assertNull(CxenseTest.queryString);
+        Assert.assertEquals(CxenseTest.jsonBody.getInt("a"), 1);
         Assert.assertEquals(jsonResponseString.trim(), "{\"date\":\"2017-03-06T15:31:52.511Z\"}");
+    }
+
+    @Test
+    public void testBasicsJsonObject() throws Exception {
+        Cxense cx = new Cxense("some.user@company.com", "api&user&h3Ke7wFEJcK33/dkeidj29==");
+        String apiPath = "/public/date";
+        JsonObject requestObject = Json.createObjectBuilder().add("b", 2).build();
+        JsonObject responseObject = cx.apiRequest(apiPath, requestObject);
+        Assert.assertTrue(("" + CxenseTest.authenticationString).matches(
+                "^username=some\\.user@company\\.com date=20[0-9]+-[0-9]+-[0-9]+T[0-9]+:[0-9]+:[0-9.]+Z hmac-sha256-hex=[A-Z0-9]+$"));
+        Assert.assertNull(CxenseTest.queryString);
+        Assert.assertEquals(CxenseTest.jsonBody.getInt("b"), 2);
+        Assert.assertEquals(responseObject.getString("date"), "2017-03-06T15:31:52.511Z");
+    }
+
+    @Test
+    public void testPersistedQueryJsonObject() throws Exception {
+        String persistedQueryId = "1234567890";
+        String apiPath = "/public/date";
+        Cxense cx = new Cxense();
+        JsonObject requestObject = Json.createObjectBuilder().add("c", 3).build();
+        JsonObject responseObject = cx.apiRequest(apiPath, requestObject, persistedQueryId);
+        Assert.assertNull(CxenseTest.authenticationString);
+        Assert.assertEquals(CxenseTest.queryString, "persisted=" + persistedQueryId );
+        Assert.assertEquals(CxenseTest.jsonBody.getInt("c"), 3);
+        Assert.assertEquals(responseObject.getString("date"), "2017-03-06T15:31:52.511Z");
     }
 
     public static class TestServlet extends HttpServlet {
         protected void doPost( HttpServletRequest request, HttpServletResponse response )
                 throws ServletException, IOException {
+            CxenseTest.authenticationString = request.getHeader("X-cXense-Authentication");
             CxenseTest.queryString = request.getQueryString();
             CxenseTest.jsonBody = Json.createReader(request.getReader()).readObject();
 
