@@ -142,9 +142,10 @@ public class PageViewEventTest {
         protected void doGet( HttpServletRequest request, HttpServletResponse response )
                 throws ServletException, IOException {
             PageViewEventTest.queryString = request.getQueryString();
-            response.setContentType("application/json");
+            response.setContentType("image/gif");
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("{}");
+            byte[] trackingGif = { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x1, 0x0, 0x1, 0x0, (byte) 0x80, 0x0, 0x0, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x0, 0x0, 0x0, 0x2c, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x1, 0x0, 0x0, 0x2, 0x2, 0x44, 0x1, 0x0, 0x3b };
+            response.getOutputStream().write(trackingGif);
         }
     }
 }
