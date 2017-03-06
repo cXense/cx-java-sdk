@@ -20,7 +20,7 @@ import javax.xml.bind.DatatypeConverter;
 public class Cxense {
     private String username;
     private String apiKey;
-    private String baseUrl = "https://api.cxense.com";
+    protected static String baseUrl = "https://api.cxense.com";
     private String userAgent = "cx-java-sdk/1.0";
     private int connectTimeoutMillis = 1000 * 20; // 20 seconds
     private int readTimeoutMillis = 1000 * 60 * 5; // 5 minutes
@@ -34,8 +34,6 @@ public class Cxense {
         this.username = username;
         this.apiKey = apiKey;
     }
-
-    public void setBaseUrl(String baseUrl) { this.baseUrl = baseUrl; }
 
     public void setUserAgent(String userAgent) { this.userAgent = userAgent; }
 
