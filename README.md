@@ -21,7 +21,7 @@ about how to create a Cxense account and retrieve your Cxense credentials.
   <dependency>
     <groupId>com.cxense.sdk</groupId>
     <artifactId>cx-java-sdk</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
   </dependency>
 </dependencies>
 ```
@@ -213,5 +213,5 @@ public class SDKSample7 {
 
 [homepage]: https://www.cxense.com/
 [docs-api]: https://wiki.cxense.com/display/cust/Home
-[install-jar]: http://sdk.cxense.com/cx-java-sdk-1.0.1.zip
+[install-jar]: http://sdk.cxense.com/cx-java-sdk-1.0.3.zip
 [cx-java-sdk-bom]: https://github.com/cxense/cx-java-sdk/tree/master/cx-java-sdk-bom
