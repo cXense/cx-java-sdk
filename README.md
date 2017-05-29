@@ -1,6 +1,6 @@
 # cx-java-sdk
 
-Note that this API is currently experimental and not supported by Cxense.  A fully supported version might be released in the future.
+***Note***: that this API is currently experimental and not supported by Cxense.  A fully supported version might be released in the future.
 
 ## Features
 
