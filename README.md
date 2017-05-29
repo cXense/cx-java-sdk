@@ -1,5 +1,7 @@
 # cx-java-sdk
 
+Note that this API is currently experimental and not supported by Cxense.  A fully supported version might be released in the future.
+
 ## Features
 
 The *Cxense Java SDK* enables Java developers to easily work with the Cxense APIs. You can get
