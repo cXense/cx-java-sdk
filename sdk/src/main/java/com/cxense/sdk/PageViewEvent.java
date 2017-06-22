@@ -1,9 +1,10 @@
 package com.cxense.sdk;
 
+import com.cxense.sdk.consts.Constants;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

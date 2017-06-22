@@ -1,13 +1,6 @@
 package com.cxense.sdk;
 
-import java.io.IOException;
-import java.net.URI;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.cxense.sdk.consts.Constants;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -15,6 +8,15 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
 
 
 public class CxenseTest {
@@ -86,13 +88,15 @@ public class CxenseTest {
         JsonObject requestObject = Json.createObjectBuilder().add("c", 3).build();
         JsonObject responseObject = cx.apiRequest(apiPath, requestObject, persistedQueryId);
         Assert.assertNull(CxenseTest.authenticationString);
-        Assert.assertEquals(CxenseTest.queryString, "persisted=" + persistedQueryId );
+        Assert.assertEquals(CxenseTest.queryString, "persisted=" + persistedQueryId);
         Assert.assertEquals(CxenseTest.jsonBody.getInt("c"), 3);
         Assert.assertEquals(responseObject.getString("date"), "2017-03-06T15:31:52.511Z");
     }
 
     public static class TestServlet extends HttpServlet {
-        protected void doPost( HttpServletRequest request, HttpServletResponse response )
+
+        protected void doPost(HttpServletRequest request,
+                              HttpServletResponse response)
                 throws ServletException, IOException {
             CxenseTest.authenticationString = request.getHeader("X-cXense-Authentication");
             CxenseTest.queryString = request.getQueryString();
@@ -102,5 +106,6 @@ public class CxenseTest {
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println("{\"date\":\"2017-03-06T15:31:52.511Z\"}");
         }
+
     }
 }
