@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Page View Event model.
  *
- * @see <a href="https://wiki.cxense.com/display/cust/Event+data"/> for full documentation
+ * @see <a href="https://wiki.cxense.com/display/cust/Event+data"></a> for full documentation
  */
 public class PageViewEvent {
     /**
