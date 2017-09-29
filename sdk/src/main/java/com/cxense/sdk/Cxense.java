@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -45,11 +46,19 @@ public class Cxense {
     /**
      * Name of the user under which API will be called.
      */
-    private final String username;
+    private String username;
     /**
      * API key of the user under which API will be called.
      */
-    private final String apiKey;
+    private String apiKey;
+    /**
+     * cx_auth_token cookie
+     */
+    private String cxAuthToken;
+    /**
+     * cx_auth_session cookie
+     */
+    private String cxAuthSession;
     /**
      * User-Agent string that will be sent as part of http request.
      * <p>
@@ -76,13 +85,27 @@ public class Cxense {
     }
 
     public Cxense() {
-        this(null, null);
     }
 
-    public Cxense(String username,
-                  String apiKey) {
+    public Cxense(String username, String apiKey) {
+        this();
+        withCredentials(username, apiKey);
+    }
+
+    public Cxense withCredentials(String username, String apiKey) {
         this.username = username;
         this.apiKey = apiKey;
+        this.cxAuthToken = null;
+        this.cxAuthSession = null;
+        return this;
+    }
+
+    public Cxense withCookies(String cxAuthToken, String cxAuthSession) {
+        this.username = null;
+        this.apiKey = null;
+        this.cxAuthToken = cxAuthToken;
+        this.cxAuthSession = cxAuthSession;
+        return this;
     }
 
     /**
@@ -94,8 +117,8 @@ public class Cxense {
      * @return new instance of PageViewEvent
      */
     public static PageViewEvent pageViewEvent(String siteId,
-                                              String location,
-                                              String userId) {
+            String location,
+            String userId) {
         return new PageViewEvent(siteId, location, userId);
     }
 
@@ -144,7 +167,7 @@ public class Cxense {
      * @throws Exception in case of API communication failures
      */
     public String apiRequest(String apiPath,
-                             String jsonQuery) throws Exception {
+            String jsonQuery) throws Exception {
         return apiRequest(apiPath, jsonQuery, null);
     }
 
@@ -158,8 +181,8 @@ public class Cxense {
      * @throws Exception in case of API communication failures
      */
     public String apiRequest(String apiPath,
-                             String jsonQuery,
-                             String persistedQueryId) throws Exception {
+            String jsonQuery,
+            String persistedQueryId) throws Exception {
         boolean isHttp = apiPath.startsWith("http://");
         byte[] jsonQueryBytes = jsonQuery.getBytes("UTF-8");
         String apiUrl;
@@ -168,17 +191,25 @@ public class Cxense {
         } else {
             apiUrl = baseUrl + apiPath;
         }
-        String url = apiUrl + (persistedQueryId != null ? "?persisted=" + URLEncoder.encode(persistedQueryId, "UTF-8") : "");
+        String url;
+        if (persistedQueryId != null) {
+            url = addParameterToUrl(apiUrl,"persisted", persistedQueryId);
+        } else if (cxAuthToken != null) {
+            url = addParameterToUrl(apiUrl,"cx_auth_token", cxAuthToken);
+        } else {
+            url = apiUrl;
+        }
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("User-Agent", this.userAgent);
         connection.setRequestProperty("Content-Length", Integer.toString(jsonQueryBytes.length));
-        if (persistedQueryId == null && !isHttp) {
-            if (this.username == null || this.apiKey == null) {
-                throw new IllegalArgumentException("Username + apiKey OR a persistedQueryId must be supplied.");
-            }
-            connection.setRequestProperty("X-cXense-Authentication",
-                    getHttpAuthenticationHeader(this.username, this.apiKey));
+
+        if (persistedQueryId != null) {
+            ; //Not additional parameters
+        } else if (username != null && apiKey != null) {
+            connection.setRequestProperty("X-cXense-Authentication", getHttpAuthenticationHeader(username, apiKey));
+        } else if (cxAuthToken != null && cxAuthSession != null) {
+            connection.setRequestProperty("Cookie", "cx_auth_token=" + cxAuthToken + "; cx_auth_session=" + cxAuthSession);
         }
         connection.setConnectTimeout((int) this.connectTimeoutMillis);
         connection.setReadTimeout((int) this.readTimeoutMillis);
@@ -204,16 +235,24 @@ public class Cxense {
         return jsonResponse.toString();
     }
 
+    private String addParameterToUrl(String uri, String parameterName, String parameterValue) throws UnsupportedEncodingException {
+        if (uri.contains("?")) {
+            return uri + "&" + parameterName + "=" + URLEncoder.encode(parameterValue, "UTF-8");
+        } else {
+            return uri + "?" + parameterName + "=" + URLEncoder.encode(parameterValue, "UTF-8");
+        }
+    }
+
     /**
      * Perform API request to specific service with specific json request.
      *
-     * @param apiPath     path to specific API service to which request must be send
-     * @param jsonRequest specific json request
+     * @param apiPath          path to specific API service to which request must be send
+     * @param jsonRequest      specific json request
      * @return API response descriptor
      * @throws Exception in case of API communication failures
      */
     public JsonObject apiRequest(String apiPath,
-                                 JsonObject jsonRequest) throws Exception {
+            JsonObject jsonRequest) throws Exception {
         return apiRequest(apiPath, jsonRequest, null);
     }
 
@@ -227,8 +266,8 @@ public class Cxense {
      * @throws Exception in case of API communication failures
      */
     public JsonObject apiRequest(String apiPath,
-                                 JsonObject jsonRequest,
-                                 String persistedQueryId) throws Exception {
+            JsonObject jsonRequest,
+            String persistedQueryId) throws Exception {
         String jsonStringResponse = this.apiRequest(apiPath, jsonRequest.toString(), persistedQueryId);
         JsonReader jsonReader = Json.createReader(new StringReader(jsonStringResponse));
         try {
