@@ -2,9 +2,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cxense.sdk</groupId>
     <artifactId>sdk-all</artifactId>
-    <version>1.0</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>sdk</module>
+        <module>client</module>
     </modules>
 </project>
