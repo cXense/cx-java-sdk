@@ -225,7 +225,11 @@ public class Cxense {
                                  String persistedQueryId) throws Exception {
         String jsonStringResponse = this.apiRequest(apiPath, jsonRequest.toString(), persistedQueryId);
         JsonReader jsonReader = Json.createReader(new StringReader(jsonStringResponse));
-        return jsonReader.readObject();
+        try {
+            return jsonReader.readObject();
+        } finally {
+            jsonReader.close();
+        }
     }
 
 }
