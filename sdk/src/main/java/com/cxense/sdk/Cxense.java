@@ -160,19 +160,25 @@ public class Cxense {
     public String apiRequest(String apiPath,
                              String jsonQuery,
                              String persistedQueryId) throws Exception {
-        if (persistedQueryId == null && (this.username == null || this.apiKey == null)) {
-            throw new IllegalArgumentException("Username + apiKey OR a persistedQueryId must be supplied.");
-        }
+        boolean isHttp = apiPath.startsWith("http://");
         byte[] jsonQueryBytes = jsonQuery.getBytes("UTF-8");
-        String url = baseUrl + apiPath +
-                (persistedQueryId != null ? "?persisted=" + URLEncoder.encode(persistedQueryId, "UTF-8") : "");
+        String apiUrl;
+        if (isHttp || apiPath.startsWith("https://")) {
+            apiUrl = apiPath;
+        } else {
+            apiUrl = baseUrl + apiPath;
+        }
+        String url = apiUrl + (persistedQueryId != null ? "?persisted=" + URLEncoder.encode(persistedQueryId, "UTF-8") : "");
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("User-Agent", this.userAgent);
-        connection.setRequestProperty("Content-Length", "" + jsonQueryBytes.length);
-        if (persistedQueryId == null) {
+        connection.setRequestProperty("Content-Length", Integer.toString(jsonQueryBytes.length));
+        if (persistedQueryId == null && !isHttp) {
+            if (this.username == null || this.apiKey == null) {
+                throw new IllegalArgumentException("Username + apiKey OR a persistedQueryId must be supplied.");
+            }
             connection.setRequestProperty("X-cXense-Authentication",
-                                          getHttpAuthenticationHeader(this.username, this.apiKey));
+                    getHttpAuthenticationHeader(this.username, this.apiKey));
         }
         connection.setConnectTimeout((int) this.connectTimeoutMillis);
         connection.setReadTimeout((int) this.readTimeoutMillis);
